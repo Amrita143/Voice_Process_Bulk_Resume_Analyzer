@@ -5,3 +5,4 @@ llama-cloud-services==0.6.3
 llama-index-core==0.12.22
 llama-index-readers-file==0.4.5
 python-dotenv==1.0.1
+supabase==2.13.0
