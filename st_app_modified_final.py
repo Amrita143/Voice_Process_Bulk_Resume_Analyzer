@@ -168,7 +168,7 @@ def main():
 
                     ### 1) **Good (Highly Preferred):**
                     - **Experience:** Prior work experience in international voice processes (preferably in debt collection).
-                    - **Added Advantage:** Experience in recognized BPO or debt collection firms, such as Astra Business Services Private Limited, GLOBAL VANTEDGE, iQor, IDC Technologies, Provana, Encore Capital Group, American Express (Amex), Genpact, iEnergizer,Teleperformance, Personiv, Fusion CX, HCLTech, Barclays MIS, Accenture etc. 
+                    - **Added Advantage:** Experience in recognized BPO or debt collection firms, such as Astra Business Services Private Limited, GLOBAL VANTEDGE, iQor, IDC Technologies, Provana, Encore Capital Group, American Express (Amex), Genpact, iEnergizer,Teleperformance, Personiv, Fusion CX, HCLTech, Barclays MIS, Accenture etc. as a voice agent role.
 
                     ### 2) **Average (Moderately Suitable):**
                     - Minimum 6 months of work experience in sales or customer service roles (any domain).
