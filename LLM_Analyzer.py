@@ -6,9 +6,9 @@ from groq import Groq
 load_dotenv()
 import re
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-client = Groq(api_key= os.getenv("LLMA_API_KEY"))
+client = Groq(api_key= st.secrets["LLMA_API_KEY"])
 
 # LLM Resume Analysis by two LLMs one after another, first one will analyze and second one will return structured output
 def llm_resume_analysis(resume_extracted_text):
