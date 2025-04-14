@@ -4,6 +4,7 @@ import zipfile
 import time
 import datetime
 import pandas as pd
+import re
 import streamlit as st
 from dotenv import load_dotenv
 from supabase import create_client
@@ -144,7 +145,13 @@ def clear_supabase_table():
     except Exception as e:
         st.error(f"Error clearing database: {str(e)}")
         return False
-
+        
+def sanitize_filename(filename):
+    """Sanitize filename to be compatible with Supabase storage keys"""
+    # Replace spaces, brackets and other problematic characters
+    sanitized = re.sub(r'[^\w\-\.]', '_', filename)
+    return sanitized
+    
 def get_all_applicants_data():
     """Retrieve all records from the bulk_applicants table"""
     response = supabase.table("bulk_applicants").select("*").execute()
@@ -205,7 +212,8 @@ def main():
         # Create a unique folder name for Supabase storage
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         zip_filename = os.path.splitext(uploaded_file.name)[0]
-        storage_folder_name = f"{zip_filename}_{timestamp}"
+        # Sanitize the folder name right when creating it
+        storage_folder_name = sanitize_filename(f"{zip_filename}_{timestamp}")
 
 
         # Read the uploaded file as bytes and wrap into a BytesIO
