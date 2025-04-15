@@ -90,33 +90,44 @@ def process_resume(file_link, parser=None):
 def upload_to_supabase_storage(file_data, folder_name, file_name):
     """Upload a file to Supabase storage and return the public URL"""
     
-    # Set the correct content type based on file extension
-    file_extension = file_name.split('.')[-1]
+    try:
+        # Sanitize folder name and file name
+        sanitized_folder = sanitize_filename(folder_name)
+        sanitized_filename = sanitize_filename(os.path.basename(file_name))
+        
+        # Set the correct content type based on file extension
+        file_extension = sanitized_filename.split('.')[-1].lower()
 
-    content_type = None
-    if file_extension.lower() == '.pdf':
-        content_type = 'application/pdf'
-    elif file_extension.lower() == '.doc':
-        content_type = 'application/msword'
-    elif file_extension.lower() == '.docx':
-        content_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    else:
-        content_type = 'application/octet-stream'
+        content_type = None
+        if file_extension == 'pdf':
+            content_type = 'application/pdf'
+        elif file_extension == 'doc':
+            content_type = 'application/msword'
+        elif file_extension == 'docx':
+            content_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        else:
+            content_type = 'application/octet-stream'
 
-    # Full path in storage including folder
-    storage_path = f"{folder_name}/{file_name}"
-    
-    # Upload to Supabase storage
-    response = supabase.storage.from_("bulk_resumes").upload(
-        storage_path,
-        file_data,
-        {"content-type": content_type} 
-    )
-    
-    # Get the public URL
-    public_url = supabase.storage.from_("bulk_resumes").get_public_url(storage_path)
-    
-    return public_url
+        # Full path in storage including folder
+        storage_path = f"{sanitized_folder}/{sanitized_filename}"
+        
+        # Debug the final storage path
+        # st.write(f"Storage path: {storage_path}")
+        
+        # Upload to Supabase storage
+        response = supabase.storage.from_("bulk_resumes").upload(
+            storage_path,
+            file_data,
+            {"content-type": content_type} 
+        )
+        
+        # Get the public URL
+        public_url = supabase.storage.from_("bulk_resumes").get_public_url(storage_path)
+        
+        return public_url
+    except Exception as e:
+        st.error(f"Error in upload_to_supabase_storage: {str(e)}")
+        raise
 
 def save_to_supabase_db(resume_data, resume_url):
     """Save resume data to Supabase database"""
@@ -148,8 +159,16 @@ def clear_supabase_table():
         
 def sanitize_filename(filename):
     """Sanitize filename to be compatible with Supabase storage keys"""
+    # Print before sanitization for debugging
+    # st.write(f"Before sanitization: {filename}")
+    
     # Replace spaces, brackets and other problematic characters
-    sanitized = re.sub(r'[^\w\-\.]', '_', filename)
+    # More aggressive replacement to ensure all special characters are handled
+    sanitized = re.sub(r'[^a-zA-Z0-9_\-\.]', '_', filename)
+    
+    # Print after sanitization for debugging
+    # st.write(f"After sanitization: {sanitized}")
+    
     return sanitized
     
 def get_all_applicants_data():
