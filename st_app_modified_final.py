@@ -115,14 +115,14 @@ def upload_to_supabase_storage(file_data, folder_name, file_name):
         # st.write(f"Storage path: {storage_path}")
         
         # Upload to Supabase storage
-        response = supabase.storage.from_("bulk_resumes").upload(
+        response = supabase.storage.from_("bulk-resumes").upload(
             storage_path,
             file_data,
             {"content-type": content_type} 
         )
         
         # Get the public URL
-        public_url = supabase.storage.from_("bulk_resumes").get_public_url(storage_path)
+        public_url = supabase.storage.from_("bulk-resumes").get_public_url(storage_path)
         
         return public_url
     except Exception as e:
